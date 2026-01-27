@@ -16,7 +16,7 @@ def home():
     return render_template('index.html')
 
 @app.route('/dashboard')
-def dasjboard():
+def dashboard():
     if 'users_id' not in session:
         return redirect(url_for('login'))
     if session['role']== 'donor':
@@ -55,4 +55,5 @@ def claim_food(food_id):
     return redirect(url_for('dashboard'))
 
 if __name__== '__main__':
+
     app.run(debug=True)
