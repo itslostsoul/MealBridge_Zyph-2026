@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Donor Dashboard</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='Single-Leaf-Logo-Template-removebg-preview.png') }}">
+    <style>
+        html, body {
+            height: 100%;
+            background-color: #F4F9F4; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar-custom {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .dashboard-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding-top: 10px;
+            padding-bottom: 30px; 
+        }
+
+        .custom-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+            border: 1px solid #e0e0e0;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #1B5E20; 
+            font-weight: 800;
+            font-size: 24px;
+            margin: 10px 0 20px 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .btn-green {
+            background-color: #1B5E20; 
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px; 
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            margin-top: 10px;
+        }
+        .btn-green:hover {
+            background-color: #144a18;
+            color: white;
+        }
+
+        .safety-box {
+            background-color: #fff3cd; 
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #856404;
+            display: flex;
+            align-items: flex-start; 
+            gap: 12px;
+        }
+
+        .form-check-input {
+            margin-top: 3px;
+            border-color: #856404;
+            width: 20px;  
+            height: 20px; 
+            flex-shrink: 0; 
+            cursor: pointer;
+        }
+
+        .green-stats-box {
+            background-color: #Dcedc8; 
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .big-points {
+            font-size: 70px; 
+            font-weight: bold;
+            color: #1B5E20;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .status-text { color: #1B5E20; font-weight: 500; }
+        .green-impact-text { color: #1B5E20; font-weight: 700; font-size: 20px; }
+        .listings-title { color: #1B5E20; font-weight: 800; font-size: 24px; margin-bottom: 20px; }
+
+        .table { --bs-table-bg: transparent; }
+        .table thead th { border-bottom: 2px solid #eee; color: #1B5E20; font-weight: 700; }
+        .table td { padding: 12px 5px; vertical-align: middle; border-bottom: 1px solid #f0f0f0; }
+        .status-active { color: #1B5E20; font-weight: bold; }
+        .status-claimed { color: #1B5E20; font-weight: bold; }
+
+        .footer-logo {
+            text-align: center; margin-top: 30px; padding-bottom: 40px;
+            font-weight: 700; font-size: 24px; color: #1B5E20;
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+        }
+        .footer-logo img { height: 80px; }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar-custom">
+        <div class="dashboard-title">Donor Dashboard</div>
+        <div class="header-right" style="display: flex; align-items: center; gap: 15px;">
+            
+            <a href="{{ url_for('home') }}" style="text-decoration: none; color: #1B5E20; font-weight: bold; font-size: 18px;">
+                Home
+            </a>
+            <span style="color: #ccc;">|</span>
+            
+            <a href="{{ url_for('logout') }}" class="btn btn-danger" style="border-radius: 20px; font-weight: bold; padding: 5px 20px;">
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="main-container">
+
+        <div class="custom-card">
+            <form action="/post_food" method="POST">
+                
+                <div class="mb-3">
+                    <label class="form-label">Food Name</label>
+                    <input class="form-control" name="food_name" type="text" placeholder="e.g. Rice & Curry" required>
+                </div>
+
+                <div class="section-title">Post Surplus Food</div>
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity (kg)</label>
+                    <input class="form-control" name="quantity" type="number" step="0.1" placeholder="e.g. 5.5" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Expiry Time</label>
+                    <input class="form-control" name="expiry" type="datetime-local" required>
+                </div>
+
+                <div class="safety-box">
+                    <input class="form-check-input" type="checkbox" id="safetyCheck" required>
+                    <label class="form-check-label" for="safetyCheck" style="font-weight: 600;">
+                        I certify that this food is fresh, hygienic, and cooked within the last 12 hours. I accept full responsibility for its safety.
+                    </label>
+                </div>
+
+                <button class="btn btn-green" type="submit">List Food & Earn Points</button>
+            </form>
+        </div>
+
+        <div class="custom-card">
+            
+            <div class="green-stats-box">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="#1B5E20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22L6.66 19.7C7.14 19.87 7.64 20 8 20C19 20 22 3 22 3C21 5 14 5.25 9 6.25C4 7.25 2 11.5 2 13.5C2 15.5 3.75 17.25 3.75 17.25C7 8 17 8 17 8Z"/>
+                </svg>
+                
+                <div class="green-impact-text">Your Green Impact</div>
+                <div class="big-points">{{ points }}</div> 
+                <div class="status-text">Your Donor Status</div>
+            </div>
+
+            <div class="listings-title">Your Listings</div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Food Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col" class="text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in food %}
+                    <tr>
+                        <td>{{ item[2] }}</td>
+                        <td>{{ item[3] }} kg</td>
+                        <td class="text-end">
+                            {% if item[4] == 'available' %}
+                                <span class="status-active">Active</span>
+                            {% else %}
+                                <span class="status-claimed">Claimed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="footer-logo">
+        Supporting UN Sustainable Development Goal 2: 
+        <img src="{{ url_for('static', filename='UN_SDG_Logo-removebg-preview.png') }}" alt="Zero Hunger">
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                alert("{{ messages[0] }}");
+            </script>
+        {% endif %}
+    {% endwith %}
+
+</body>
+</html>
